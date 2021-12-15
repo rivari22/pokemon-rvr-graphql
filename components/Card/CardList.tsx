@@ -6,7 +6,6 @@ import ground from "../../public/images/groundrm.png";
 
 interface ICardListProps {
   name: string;
-  image: string;
   dreamworld: string;
 }
 

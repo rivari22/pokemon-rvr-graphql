@@ -1,26 +1,8 @@
 import styles from "../styles/Home.module.css";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import CardList from "../components/Card/CardList";
 import router from "next/router";
-
-const GET_POKEMONS = gql`
-  query pokemons($limit: Int, $offset: Int) {
-    pokemons(limit: $limit, offset: $offset) {
-      count
-      next
-      previous
-      status
-      message
-      results {
-        id
-        url
-        name
-        image
-        dreamworld
-      }
-    }
-  }
-`;
+import { GET_POKEMONS } from "../graphql/query";
 
 const gqlVariables = {
   limit: 8,
@@ -31,10 +13,6 @@ const Home = () => {
   const { loading, error, data } = useQuery(GET_POKEMONS, {
     variables: gqlVariables,
   });
-
-  const handleGoDetail = (name: string) => {
-    router.push(`/detail/${name}`)
-  }
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
@@ -55,12 +33,13 @@ const Home = () => {
             <div
               key={pokemon.id}
               style={{
-                width: "368px",
+                width: "100%",
+                backgroundColor: 'black',
                 display: "flex",
                 justifyContent: odd ? "start" : "end",
                 alignItems: 'center'
               }}
-              onClick={() => handleGoDetail(pokemon.name)}
+              onClick={() => router.push(`/detail/${pokemon.name}`)}
             >
               {!odd && <div>{pokemon.name}</div>}
               <CardList {...pokemon} />
