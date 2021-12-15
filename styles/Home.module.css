@@ -1,5 +1,7 @@
 .container {
-  padding: 0 2rem;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  padding: 16px;
 }
 
 .main {
