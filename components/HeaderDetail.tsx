@@ -22,9 +22,9 @@ const HeaderDetail = (props: IDetailPokemon) => {
         padding: 16,
       }}
     >
-        <div onClick={() => router.back()}>
-            arrow back
-        </div>
+      <div onClick={() => router.back()} className="hoverPointer">
+        arrow back
+      </div>
       <div
         style={{
           display: "flex",

@@ -25,7 +25,7 @@ const Home = () => {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          padding: 16
+          padding: 16,
         }}
       >
         {data?.pokemons.results.map((pokemon: any, index: number) => {
@@ -37,12 +37,14 @@ const Home = () => {
                 width: "100%",
                 display: "flex",
                 justifyContent: odd ? "start" : "end",
-                alignItems: 'center'
+                alignItems: "center",
               }}
-              onClick={() => router.push(`/detail/${pokemon.name}`)}
             >
               {!odd && <div>{pokemon.name}</div>}
-              <CardList {...pokemon} />
+              <CardList
+                {...pokemon}
+                onClick={() => router.push(`/detail/${pokemon.name}`)}
+              />
               {odd && <div>{pokemon.name}</div>}
             </div>
           );

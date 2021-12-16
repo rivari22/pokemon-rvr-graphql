@@ -7,6 +7,7 @@ import ground from "../../public/images/groundrm.png";
 interface ICardListProps {
   name: string;
   dreamworld: string;
+  onClick: () => void;
 }
 
 const ContainerCard = styled.div`
@@ -17,7 +18,7 @@ const ContainerCard = styled.div`
 
 const CardList = (props: ICardListProps) => {
   return (
-    <ContainerCard>
+    <ContainerCard onClick={props.onClick} className="hoverPointer">
       <div style={{ display: "flex", justifyContent: "center" }}>
         <img
           src={props.dreamworld}

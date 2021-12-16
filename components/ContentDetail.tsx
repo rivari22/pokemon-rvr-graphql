@@ -21,9 +21,11 @@ interface ITabStyled {
 const TabStyled = styled.div`
   padding-bottom: 20px;
   border-bottom-width: 2px;
-  border-color: #AAB3EB;
+  border-color: #aab3eb;
   border-bottom-style: ${(props: ITabStyled) =>
     props.isTabActive ? "solid" : "none"};
+  color: ${(props: ITabStyled) =>
+    props.isTabActive ? "black" : "#E0E0E2"};
 `;
 
 const Tab = ({
@@ -44,12 +46,14 @@ const Tab = ({
       }}
     >
       <TabStyled
+        className="hoverPointer"
         isTabActive={tabActive === "about"}
         onClick={() => setTabActive("about")}
       >
         About
       </TabStyled>
       <TabStyled
+        className="hoverPointer"
         isTabActive={tabActive === "baseStats"}
         onClick={() => setTabActive("baseStats")}
       >
@@ -91,7 +95,7 @@ const ContentDetail = (props: IDetailPokemon) => {
         </div>
       ) : (
         <div>
-            <BaseStatsDetail data={props.stats} />
+          <BaseStatsDetail data={props.stats} />
         </div>
       )}
     </ContainerContent>
