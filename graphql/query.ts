@@ -18,22 +18,32 @@ export const GET_POKEMONS = gql`
 `;
 
 export const GET_DETAIL_POKEMON = gql`
-query pokemon($name: String!) {
+  query pokemon($name: String!) {
     pokemon(name: $name) {
       id
       name
+      order
+      types {
+        type {
+          name
+        }
+      }
+      sprites {
+        front_default
+      }
+      species {
+        name
+      }
+      height
+      weight
       abilities {
         ability {
           name
         }
       }
-      moves {
-        move {
-          name
-        }
-      }
-      types {
-        type {
+      stats {
+        base_stat
+        stat {
           name
         }
       }
@@ -41,4 +51,4 @@ query pokemon($name: String!) {
       status
     }
   }
-`
+`;

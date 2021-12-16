@@ -1,7 +1,6 @@
 .container {
   max-width: 400px;
   border: 1px solid #ccc;
-  padding: 16px;
   background-image: url('../public/images/background1.png');
 }
 
