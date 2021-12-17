@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useContext, useState } from "react";
 import router from "next/router";
-import { TabContext } from "../../context/TabContext";
+import { TabContext } from "../../context/AppTabContext/context";
 
 const ContainerBottomTab = styled.div`
   position: fixed;
