@@ -5,33 +5,121 @@ import router from "next/router";
 import { GET_POKEMONS } from "../graphql/query";
 import BottomTab from "../components/Tab/BottomTab";
 import { Loading } from "../components/Loading";
-import { CardName } from "../components/Card";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useEffect, useState } from "react";
 
 const gqlVariables = {
-  limit: 30,
-  offset: 1,
+  limit: 10,
+  offset: 0,
 };
 
+interface PokemonData {
+  id: number;
+  name: string;
+  dreamworld: string;
+  count?: number;
+}
+
 const Home = () => {
-  const { loading, error, data } = useQuery(GET_POKEMONS, {
+  const { loading, error, data, fetchMore } = useQuery(GET_POKEMONS, {
     variables: gqlVariables,
   });
+  const [dataPokemon, setDataPokemon] = useState<Array<PokemonData>>();
 
-  if (loading) return <Loading isLoading={loading} />;
+  useEffect(() => {
+    const pokemons = localStorage.getItem("pokemon");
+    if (pokemons && data) {
+      const pokemonState = JSON.parse(pokemons);
+      const newData = data.pokemons.results.map((pokemon: any) => {
+        const res: {
+          id: number;
+          name: string;
+          dreamworld: string;
+          count?: number;
+        } = {
+          id: pokemon.id,
+          name: pokemon.name,
+          dreamworld: pokemon.dreamworld,
+          count: 0,
+        };
+
+        pokemonState.forEach((item: any) => {
+          if (pokemon.name === item.name)
+            res.count !== undefined && res.count++;
+        });
+
+        if (res.count === 0) {
+          delete res.count;
+        }
+
+        return res;
+      });
+
+      setDataPokemon(newData);
+    } else if (data) {
+      setDataPokemon(data.pokemons.results);
+    }
+  }, [data]);
+
+  if (loading && !dataPokemon) return <Loading isLoading={loading} />;
 
   if (error) return `Error! ${error.message}`;
 
   return (
     <div className={styles.container}>
-      <BottomTab />
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          padding: 16,
-        }}
+      <InfiniteScroll
+        style={{ display: "flex", flexWrap: "wrap", padding: 16 }}
+        dataLength={dataPokemon?.length || 0} //This is important field to render the next data
+        next={() =>
+          fetchMore({
+            variables: {
+              limit: 10,
+              offset: data.pokemons.results.length,
+            },
+            updateQuery: (
+              prev,
+              { fetchMoreResult }: { fetchMoreResult?: any }
+            ) => {
+              if (!fetchMoreResult) return prev;
+
+              return {
+                pokemons: {
+                  __typename: "PokemonList",
+                  count: fetchMoreResult.pokemons.count,
+                  next: fetchMoreResult.pokemons.next,
+                  previous: fetchMoreResult.pokemons.previous,
+                  status: fetchMoreResult.pokemons.status,
+                  message: fetchMoreResult.pokemons.message,
+                  results: [
+                    ...prev.pokemons.results,
+                    ...fetchMoreResult.pokemons.results,
+                  ],
+                },
+              };
+            },
+          })
+        }
+        hasMore={true}
+        loader={<Loading isLoading />}
+        endMessage={
+          <p style={{ textAlign: "center" }}>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+        // below props only if you need pull down functionality
+        // refreshFunction={this.refresh}
+        // pullDownToRefresh
+        // pullDownToRefreshThreshold={50}
+        // pullDownToRefreshContent={
+        //   <h3 style={{ textAlign: "center" }}>
+        //     &#8595; Pull down to refresh
+        //   </h3>
+        // }
+        // releaseToRefreshContent={
+        //   <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+        // }
       >
-        {data?.pokemons.results.map((pokemon: any, index: number) => {
+        {dataPokemon?.map((pokemon: any, index: number) => {
           const odd = index % 2 === 0;
           return (
             <div
@@ -43,16 +131,16 @@ const Home = () => {
                 alignItems: "center",
               }}
             >
-              {!odd && <CardName label={pokemon.name} />}
               <CardList
                 {...pokemon}
+                odd={odd}
                 onClick={() => router.push(`/detail/${pokemon.name}`)}
               />
-              {odd && <CardName label={pokemon.name} />}
             </div>
           );
         })}
-      </div>
+      </InfiniteScroll>
+      <BottomTab />
     </div>
   );
 };

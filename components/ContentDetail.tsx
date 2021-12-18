@@ -198,6 +198,7 @@ const ContentDetail = (props: IDetailPokemon) => {
                   height: "2rem",
                   padding: 10
                 }}
+                minLength={1}
               />
               <div
                 style={{

@@ -33,5 +33,9 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-Error:
+FIXME:
 1. card list on HP always justify-content-start
+2. empty string can submit pokemon
+3. style and refactor
+4. animation
+5. icon arrow back and bottom drawer

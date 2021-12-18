@@ -3,6 +3,7 @@ import React from "react";
 
 interface ICardNameProps {
   label: string;
+  count?: number;
 }
 
 export const ContainerCardName = styled.div`
@@ -14,10 +15,16 @@ export const ContainerCardName = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 
-const CardName = ({ label }: ICardNameProps) => {
-  return <ContainerCardName>{label}</ContainerCardName>;
+const CardName = ({ label, count }: ICardNameProps) => {
+  return (
+    <ContainerCardName>
+      {count && <div style={{ fontSize: "0.7em", color: 'gray' }}>owned: {count}</div>}
+      <div>{label}</div>
+    </ContainerCardName>
+  );
 };
 
 export default CardName;

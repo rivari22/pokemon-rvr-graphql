@@ -2,7 +2,6 @@ import React from 'react'
 import { Modal } from '../Modal'
 import ReactLoading from "react-loading";
 
-
 interface ILoadingProps {
     isLoading: boolean
 }
