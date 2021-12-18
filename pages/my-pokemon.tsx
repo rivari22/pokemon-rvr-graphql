@@ -5,16 +5,10 @@ import CardList from "../components/Card/CardList";
 import router from "next/router";
 import { PokemonContext } from "../context/AppPokemonContext/context";
 import { PokemonEnumActionType } from "../context/AppPokemonContext/reducer";
+import { CardName } from "../components/Card";
 
 const MyPokemon = () => {
-  const { state: statePokemon, dispatch: dispatchPokemon } = useContext(PokemonContext);
-
-  useEffect(() => {
-    dispatchPokemon({
-      type: PokemonEnumActionType.ALL_POKEMON,
-      payload: "",
-    });
-  }, [dispatchPokemon]);
+  const { state: statePokemon } = useContext(PokemonContext);
 
   return (
     <div className={styles.container}>
@@ -38,13 +32,13 @@ const MyPokemon = () => {
                 alignItems: "center",
               }}
             >
-              {!odd && <div>{pokemon.username}</div>}
+              {!odd && <CardName label={pokemon.username} />}
               <CardList
                 {...pokemon}
                 onClick={() => router.push(`/detail/${pokemon.name}`)}
                 isMyPokemon
               />
-              {odd && <div>{pokemon.username}</div>}
+              {odd && <CardName label={pokemon.username} />}
             </div>
           );
         })}

@@ -4,6 +4,8 @@ import CardList from "../components/Card/CardList";
 import router from "next/router";
 import { GET_POKEMONS } from "../graphql/query";
 import BottomTab from "../components/Tab/BottomTab";
+import { Loading } from "../components/Loading";
+import { CardName } from "../components/Card";
 
 const gqlVariables = {
   limit: 30,
@@ -15,7 +17,8 @@ const Home = () => {
     variables: gqlVariables,
   });
 
-  if (loading) return "Loading...";
+  if (loading) return <Loading isLoading={loading} />;
+
   if (error) return `Error! ${error.message}`;
 
   return (
@@ -40,12 +43,12 @@ const Home = () => {
                 alignItems: "center",
               }}
             >
-              {!odd && <div>{pokemon.name}</div>}
+              {!odd && <CardName label={pokemon.name} />}
               <CardList
                 {...pokemon}
                 onClick={() => router.push(`/detail/${pokemon.name}`)}
               />
-              {odd && <div>{pokemon.name}</div>}
+              {odd && <CardName label={pokemon.name} />}
             </div>
           );
         })}

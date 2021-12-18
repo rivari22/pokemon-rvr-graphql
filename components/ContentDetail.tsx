@@ -6,9 +6,8 @@ import { IDetailPokemon } from "../pages/detail/[name]";
 import { probabilityAddPokemon } from "../utils/probabilityAddPokemon";
 import AboutDetail from "./AboutDetail";
 import BaseStatsDetail from "./BaseStatsDetail";
-import Modal from "react-modal";
-
-Modal.setAppElement('#__next');
+import { Loading } from "./Loading";
+import { Modal } from "./Modal";
 
 const ContainerContent = styled.section`
   min-width: 400px;
@@ -18,6 +17,14 @@ const ContainerContent = styled.section`
   min-height: 50vh;
   max-height: 100vh;
   padding: 60px 20px;
+`;
+
+const ButtonStyled = styled.button`
+  background-color: white;
+  display: flex;
+  margin: 10px 0 0 0;
+  border-radius: 6px;
+  justify-content: end;
 `;
 
 interface ITabStyled {
@@ -69,13 +76,16 @@ const Tab = ({
 };
 
 const ContentDetail = (props: IDetailPokemon) => {
-  const { dispatch: dispatchPokemon } = useContext(PokemonContext);
+  const { state: statePokemon, dispatch: dispatchPokemon } =
+    useContext(PokemonContext);
   const [tabActive, setTabActive] = useState<"about" | "baseStats">("about");
-  const [isOpenModal, setIsOpenModal] = useState({
+  const [modal, setModal] = useState({
     open: false,
     success: false,
   });
-  const [username, setUsername] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const dataAboutTab = useMemo(() => {
     return [
       {
@@ -97,60 +107,137 @@ const ContentDetail = (props: IDetailPokemon) => {
     ];
   }, [props.abilities, props.height, props.species.name, props.weight]);
 
-  const handleSubmit = ({success} : {success: boolean}) => {
+  const handleSubmit = ({
+    success,
+    event,
+  }: {
+    success: boolean;
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
+  }) => {
+    event.preventDefault();
     if (success) {
+      const findSamePokemon = statePokemon?.find(
+        (item) => item.username === username
+      );
+      if (findSamePokemon) {
+        return setErrorMsg("Username already taken, please use another.");
+      }
+
       const payload = {
         id: props.id,
         name: props.name,
         dreamworld: props.sprites.front_default,
-        username
+        username,
       };
-  
+
       dispatchPokemon({
         type: PokemonEnumActionType.ADD_POKEMON,
         payload,
       });
-      setIsOpenModal({
+      setModal({
         open: false,
-        success: true,
-      })
-    } else {
-      setIsOpenModal({
-        open: false,
-        success: false,
-      })
-    }
-  }
-
-  const handleAddPokemon = async () => {
-    const probabilitySuccess = probabilityAddPokemon();
-
-    if (probabilitySuccess) {
-      setIsOpenModal({
-        open: true,
         success: true,
       });
     } else {
-      // TODO ADD MODAL
-      console.log("GAGAL NIH");
-      setIsOpenModal({
-        open: true,
+      setModal({
+        open: false,
         success: false,
       });
     }
   };
 
+  const handleAddPokemon = async () => {
+    const probabilitySuccess = probabilityAddPokemon();
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      if (probabilitySuccess) {
+        setModal({
+          open: true,
+          success: true,
+        });
+      } else {
+        setModal({
+          open: true,
+          success: false,
+        });
+      }
+    }, 500);
+  };
+
   return (
     <ContainerContent>
-      <Modal isOpen={isOpenModal.open} contentLabel="Example Modal">
-        {isOpenModal.success ? (
-          <form >
-            <label htmlFor="username">Input username</label>
-            <input type="text" id="username" onChange={(e) => setUsername(e.target.value)} />
-            <button onClick={() => handleSubmit({success: true})}>Congrats</button>
-          </form>
+      <Loading isLoading={isLoading} />
+      <Modal isOpen={modal.open}>
+        {modal.success ? (
+          <>
+            <div
+              style={{
+                fontSize: "1.2em",
+                margin: "0 0 10px 0",
+                fontWeight: "bold",
+                borderBottom: "1px solid black",
+                textAlign: "center",
+                paddingBottom: 10,
+              }}
+            >
+              Congrats you got it
+            </div>
+            <form>
+              <label htmlFor="username">Input username</label>
+              <input
+                placeholder="ex: rivari22"
+                type="text"
+                id="username"
+                onChange={(e) => setUsername(e.target.value)}
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  border: "1px solid black",
+                  borderRadius: 6,
+                  height: "2rem",
+                  padding: 10
+                }}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: 10,
+                }}
+              >
+                <ButtonStyled
+                  onClick={(event) => handleSubmit({ success: true, event })}
+                  className="hoverPointer"
+                >
+                  Submit
+                </ButtonStyled>
+                <ButtonStyled
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setModal({ open: false, success: false });
+                  }}
+                  className="hoverPointer"
+                >
+                  Cancel
+                </ButtonStyled>
+              </div>
+              <div style={{ color: "red", fontWeight: 600 }}>{errorMsg}</div>
+            </form>
+          </>
         ) : (
-          <button onClick={() => handleSubmit({success: false})}>gagal nih</button>
+          <>
+            <div>Sorry you failed to get pokemon.</div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
+              <ButtonStyled
+                onClick={(event) => {
+                  handleSubmit({ success: false, event });
+                }}
+              >
+                close
+              </ButtonStyled>
+            </div>
+          </>
         )}
       </Modal>
       <Tab tabActive={tabActive} setTabActive={setTabActive} />

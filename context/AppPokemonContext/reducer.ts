@@ -7,12 +7,6 @@ export enum PokemonEnumActionType {
   REMOVE_POKEMON = "REMOVE_POKEMON",
 }
 
-type PokemonPayload = {
-  [PokemonEnumActionType.ALL_POKEMON]: Array<PokemonInterface>;
-  [PokemonEnumActionType.ADD_POKEMON]: string;
-  [PokemonEnumActionType.REMOVE_POKEMON]: string;
-};
-
 export type PokemonActions = {
   type: PokemonEnumActionType;
   // FIXME ANY

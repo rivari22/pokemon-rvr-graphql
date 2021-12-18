@@ -22,7 +22,7 @@ export const ContentDetailList = ({
     style={{ display: "flex", marginBottom: 10, gap: 20, alignItems: "center" }}
   >
     <div style={{ display: "flex", gap: 60, alignItems: "center" }}>
-      <div style={{ minWidth: 60, width }}>{label}</div>
+      <div style={{ minWidth: 60, width, textTransform: 'capitalize' }}>{label}</div>
       <div style={{ width: 30 }}>{value}</div>
     </div>
     {bgColorBar && (
