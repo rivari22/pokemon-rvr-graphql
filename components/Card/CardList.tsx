@@ -8,7 +8,7 @@ import { PokemonEnumActionType } from "../../context/AppPokemonContext/reducer";
 import ground from "../../public/images/groundrm.png";
 import { RiCloseCircleFill } from "react-icons/ri";
 
-interface ICardListProps {
+export interface ICardListProps {
   name: string;
   dreamworld: string;
   onClick: () => void;
