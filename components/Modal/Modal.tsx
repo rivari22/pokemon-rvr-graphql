@@ -1,8 +1,6 @@
 import React from "react";
 import ReactModal from "react-modal";
 
-ReactModal.setAppElement("#__next");
-
 const customStyles = (loading?: boolean) => {
   return {
     content: {

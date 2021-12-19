@@ -19,7 +19,7 @@ const MyPokemon = () => {
 
   return (
     <div className="containerList">
-      <CardTitle label="My Pokemon" testId="title" />
+      <CardTitle label="My Pokemon" testId="titleMyPokemon" />
       <div
         style={{
           display: "flex",

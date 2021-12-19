@@ -19,6 +19,7 @@ const ContainerContent = styled.section`
   min-height: 50vh;
   max-height: 100vh;
   padding: 60px 20px;
+  position: relative;
 `;
 
 const ButtonStyled = styled.button`
@@ -55,7 +56,7 @@ export const ContentDetailList = ({
     {bgColorBar && (
       <ProgressBar
         completed={value}
-        width="120px"
+        width="160px"
         height="6px"
         bgColor={bgColorBar}
         customLabel=" "
@@ -245,12 +246,12 @@ const ContentDetail = (props: IDetailPokemon) => {
       <div
         style={{
           position: "absolute",
-          bottom: 0,
+          bottom: 10,
           left: "50%",
           transform: " translate(-50%, -0%)",
         }}
       >
-        <button onClick={handleAddPokemon} style={{ borderRadius: 6, backgroundColor: 'white', padding: '6px 20px' }}>
+        <button onClick={handleAddPokemon} style={{ borderRadius: 6, backgroundColor: 'white', padding: '6px 20px', border: '1px solid black' }}>
           Catch pokemon
         </button>
       </div>

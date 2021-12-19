@@ -5,7 +5,7 @@ import { GET_POKEMONS } from "../graphql/query";
 import BottomTab from "../components/Tab/BottomTab";
 import { Loading } from "../components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardTitle } from "../components/Card";
 
 const gqlVariables = {
@@ -63,11 +63,11 @@ const Home = () => {
 
   if (loading && !dataPokemon) return <Loading isLoading={loading} />;
 
-  if (error) return `Error! ${error.message}`;
+  if (error) return <div>Error! {error.message}</div>;
 
   return (
     <div className="containerList">
-      <CardTitle label="Pokemon World" />
+      <CardTitle label="Pokemon World" testId="titlePokemonWorld" />
       <InfiniteScroll
         style={{ display: "flex", flexWrap: "wrap", padding: 16 }}
         dataLength={dataPokemon?.length || 0}
