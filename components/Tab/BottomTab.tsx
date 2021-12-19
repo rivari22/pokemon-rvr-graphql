@@ -40,7 +40,7 @@ const BottomTab = () => {
           style={{ color: tabActive === "/" ? "red" : "black" }}
           className="hoverPointer"
         >
-          Pokemon List
+          Pokemon World
         </div>
         <div
           onClick={() => handleClickTab("/my-pokemon")}

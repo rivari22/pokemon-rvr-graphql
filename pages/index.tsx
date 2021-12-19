@@ -6,6 +6,7 @@ import BottomTab from "../components/Tab/BottomTab";
 import { Loading } from "../components/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useEffect, useState } from "react";
+import { CardTitle } from "../components/Card";
 
 const gqlVariables = {
   limit: 10,
@@ -66,6 +67,7 @@ const Home = () => {
 
   return (
     <div className="containerList">
+      <CardTitle label="Pokemon World" />
       <InfiniteScroll
         style={{ display: "flex", flexWrap: "wrap", padding: 16 }}
         dataLength={dataPokemon?.length || 0}

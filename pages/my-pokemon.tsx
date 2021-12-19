@@ -4,6 +4,7 @@ import CardList from "../components/Card/CardList";
 import router from "next/router";
 import { PokemonContext } from "../context/AppPokemonContext/context";
 import { PokemonEnumActionType } from "../context/AppPokemonContext/reducer";
+import { CardTitle } from "../components/Card";
 
 const MyPokemon = () => {
   const { state: statePokemon, dispatch: dispatchPokemon } =
@@ -18,6 +19,7 @@ const MyPokemon = () => {
 
   return (
     <div className="containerList">
+      <CardTitle label="My Pokemon" />
       <div
         style={{
           display: "flex",
