@@ -47,7 +47,7 @@ const BottomTab = () => {
           style={{ color: tabActive === "/my-pokemon" ? "red" : "black" }}
           className="hoverPointer"
         >
-          My Pokemon
+          My Poemon
         </div>
       </div>
     </ContainerBottomTab>

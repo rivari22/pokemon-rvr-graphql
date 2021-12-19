@@ -2,11 +2,13 @@ import React from "react";
 
 interface ICardTitleProps {
     label: string;
+    testId?: string;
 }
 
 const CardTitle = (props: ICardTitleProps) => {
   return (
     <div
+        data-testid={props.testId}
       style={{
         display: "flex",
         justifyContent: "center",
