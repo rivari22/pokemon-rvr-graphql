@@ -28,3 +28,12 @@ a {
 .hoverPointer:hover { 
   cursor: pointer;
 }
+
+.containerList {
+  max-width: 400px;
+  border: 1px solid #ccc;
+  background-image: url('../public/images/background1.png');
+  min-width: 400px;
+  min-height: 100vh;
+}
+

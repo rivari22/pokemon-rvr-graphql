@@ -1,4 +1,3 @@
-import styles from "../styles/Home.module.css";
 import { useQuery } from "@apollo/client";
 import CardList from "../components/Card/CardList";
 import router from "next/router";
@@ -66,10 +65,10 @@ const Home = () => {
   if (error) return `Error! ${error.message}`;
 
   return (
-    <div className={styles.container}>
+    <div className="containerList">
       <InfiniteScroll
         style={{ display: "flex", flexWrap: "wrap", padding: 16 }}
-        dataLength={dataPokemon?.length || 0} //This is important field to render the next data
+        dataLength={dataPokemon?.length || 0}
         next={() =>
           fetchMore({
             variables: {
@@ -106,18 +105,6 @@ const Home = () => {
             <b>Yay! You have seen it all</b>
           </p>
         }
-        // below props only if you need pull down functionality
-        // refreshFunction={this.refresh}
-        // pullDownToRefresh
-        // pullDownToRefreshThreshold={50}
-        // pullDownToRefreshContent={
-        //   <h3 style={{ textAlign: "center" }}>
-        //     &#8595; Pull down to refresh
-        //   </h3>
-        // }
-        // releaseToRefreshContent={
-        //   <h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
-        // }
       >
         {dataPokemon?.map((pokemon: any, index: number) => {
           const odd = index % 2 === 0;

@@ -1,13 +1,15 @@
 import styled from "@emotion/styled";
+import ProgressBar from "@ramonak/react-progress-bar";
 import React, { useContext, useMemo, useState } from "react";
 import { PokemonContext } from "../context/AppPokemonContext/context";
 import { PokemonEnumActionType } from "../context/AppPokemonContext/reducer";
-import { IDetailPokemon } from "../pages/detail/[name]";
+import { IDetailPokemon } from "../interface/DetailInterface";
 import { probabilityAddPokemon } from "../utils/probabilityAddPokemon";
 import AboutDetail from "./AboutDetail";
 import BaseStatsDetail from "./BaseStatsDetail";
 import { Loading } from "./Loading";
 import { Modal } from "./Modal";
+import { DetailTab } from "./Tab";
 
 const ContainerContent = styled.section`
   min-width: 400px;
@@ -27,53 +29,40 @@ const ButtonStyled = styled.button`
   justify-content: end;
 `;
 
-interface ITabStyled {
-  isTabActive: boolean;
-}
-
-const TabStyled = styled.div`
-  padding-bottom: 20px;
-  border-bottom-width: 2px;
-  border-color: #aab3eb;
-  border-bottom-style: ${(props: ITabStyled) =>
-    props.isTabActive ? "solid" : "none"};
-  color: ${(props: ITabStyled) => (props.isTabActive ? "black" : "#E0E0E2")};
+export const ContainerDetailContent = styled.div`
+  margin-top: 20px;
+  margin-bottom: 10px;
 `;
 
-const Tab = ({
-  tabActive,
-  setTabActive,
+export const ContentDetailList = ({
+  label,
+  value,
+  width,
+  bgColorBar,
 }: {
-  tabActive: string;
-  setTabActive: React.Dispatch<React.SetStateAction<"about" | "baseStats">>;
-}) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        borderBottomStyle: "solid",
-        borderBottomWidth: 1,
-        borderColor: "#e1e4f2",
-      }}
-    >
-      <TabStyled
-        className="hoverPointer"
-        isTabActive={tabActive === "about"}
-        onClick={() => setTabActive("about")}
-      >
-        About
-      </TabStyled>
-      <TabStyled
-        className="hoverPointer"
-        isTabActive={tabActive === "baseStats"}
-        onClick={() => setTabActive("baseStats")}
-      >
-        Base Stats
-      </TabStyled>
+  label: string;
+  value: string;
+  width?: number;
+  bgColorBar?: string;
+}) => (
+  <div
+    style={{ display: "flex", marginBottom: 10, gap: 20, alignItems: "center" }}
+  >
+    <div style={{ display: "flex", gap: 60, alignItems: "center" }}>
+      <div style={{ minWidth: 60, width, textTransform: 'capitalize' }}>{label}</div>
+      <div style={{ width: width ? 30 : "auto" }}>{value}</div>
     </div>
-  );
-};
+    {bgColorBar && (
+      <ProgressBar
+        completed={value}
+        width="120px"
+        height="6px"
+        bgColor={bgColorBar}
+        customLabel=" "
+      />
+    )}
+  </div>
+);
 
 const ContentDetail = (props: IDetailPokemon) => {
   const { state: statePokemon, dispatch: dispatchPokemon } =
@@ -84,7 +73,7 @@ const ContentDetail = (props: IDetailPokemon) => {
     success: false,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("");
+  const [nickname, setNickname] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const dataAboutTab = useMemo(() => {
     return [
@@ -94,11 +83,11 @@ const ContentDetail = (props: IDetailPokemon) => {
       },
       {
         label: "Height",
-        value: props.height,
+        value: String(props.height),
       },
       {
         label: "Weight",
-        value: props.weight,
+        value: String(props.weight),
       },
       {
         label: "Abilities",
@@ -117,17 +106,19 @@ const ContentDetail = (props: IDetailPokemon) => {
     event.preventDefault();
     if (success) {
       const findSamePokemon = statePokemon?.find(
-        (item) => item.username === username
+        (item) => item.nickname === nickname
       );
       if (findSamePokemon) {
-        return setErrorMsg("Username already taken, please use another.");
+        return setErrorMsg("Nickname already taken, please use another.");
+      } else if (!nickname) {
+        return setErrorMsg("Nickname cannot empty.");
       }
 
       const payload = {
         id: props.id,
         name: props.name,
         dreamworld: props.sprites.front_default,
-        username,
+        nickname,
       };
 
       dispatchPokemon({
@@ -184,19 +175,19 @@ const ContentDetail = (props: IDetailPokemon) => {
               Congrats you got it
             </div>
             <form>
-              <label htmlFor="username">Input username</label>
+              <label htmlFor="nickname">Input nickname</label>
               <input
                 placeholder="ex: rivari22"
                 type="text"
-                id="username"
-                onChange={(e) => setUsername(e.target.value)}
+                id="nickname"
+                onChange={(e) => setNickname(e.target.value)}
                 style={{
                   width: "100%",
                   marginTop: 10,
                   border: "1px solid black",
                   borderRadius: 6,
                   height: "2rem",
-                  padding: 10
+                  padding: 10,
                 }}
                 minLength={1}
               />
@@ -228,8 +219,8 @@ const ContentDetail = (props: IDetailPokemon) => {
           </>
         ) : (
           <>
-            <div>Sorry you failed to get pokemon.</div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
+            <div>Sorry you failed to get pokemon. You can try again.</div>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <ButtonStyled
                 onClick={(event) => {
                   handleSubmit({ success: false, event });
@@ -241,7 +232,7 @@ const ContentDetail = (props: IDetailPokemon) => {
           </>
         )}
       </Modal>
-      <Tab tabActive={tabActive} setTabActive={setTabActive} />
+      <DetailTab tabActive={tabActive} setTabActive={setTabActive} />
       {tabActive === "about" ? (
         <div>
           <AboutDetail data={dataAboutTab} />
@@ -251,7 +242,18 @@ const ContentDetail = (props: IDetailPokemon) => {
           <BaseStatsDetail data={props.stats} />
         </div>
       )}
-      <button onClick={handleAddPokemon}>add pokemon</button>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: "50%",
+          transform: " translate(-50%, -0%)",
+        }}
+      >
+        <button onClick={handleAddPokemon} style={{ borderRadius: 6, backgroundColor: 'white', padding: '6px 20px' }}>
+          Catch pokemon
+        </button>
+      </div>
     </ContainerContent>
   );
 };

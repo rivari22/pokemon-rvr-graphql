@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerDetailContent, ContentDetailList } from "./AboutDetail";
+import { ContainerDetailContent, ContentDetailList } from "./ContentDetail";
 
 const BaseStatsDetail = (props: {
   data: Array<{

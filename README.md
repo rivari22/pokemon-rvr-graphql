@@ -35,7 +35,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 FIXME:
 1. card list on HP always justify-content-start
-2. empty string can submit pokemon
+2. empty string can submit pokemon (DONE)
 3. style and refactor
 4. animation
-5. icon arrow back and bottom drawer
+5. icon bottom drawer
+6. give interface to any type
+7. unit test jest

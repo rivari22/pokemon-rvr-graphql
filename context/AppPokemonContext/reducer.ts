@@ -35,7 +35,7 @@ export const pokemonReducer = (
     case PokemonEnumActionType.REMOVE_POKEMON:
       if (action.payload) {
         const filterMyPokemon = state.filter(
-          (item) => item.username !== action.payload
+          (item) => item.nickname !== action.payload
         );
         localStorage.setItem("pokemon", JSON.stringify(filterMyPokemon));
         return filterMyPokemon;

@@ -1,49 +1,19 @@
 import { GetServerSidePropsContext } from "next";
-import React, { useMemo } from "react";
+import React from "react";
 import ContentDetail from "../../components/ContentDetail";
 import HeaderDetail from "../../components/HeaderDetail";
 import { GET_DETAIL_POKEMON } from "../../graphql/query";
 import { client } from "../../graphql/setup";
+import { IDetailPokemon } from "../../interface/DetailInterface";
 import { bgColor } from "../../styles/Color";
 
-type NameTypes = "grass" | "poison" | "fire" | "water" | "bug" | "electric";
-export interface IDetailPokemon {
-  id: number;
-  name: string;
-  order: number;
-  types: Array<{
-    type: {
-      name: NameTypes;
-    };
-  }>;
-  sprites: {
-    front_default: string;
-  };
-  species: {
-    name: string;
-    url: string;
-  };
-  height: number;
-  weight: number;
-  abilities: Array<{
-    ability: {
-      name: string;
-    };
-  }>;
-  stats: Array<{
-    base_stat: number;
-    stat: {
-      name: string;
-    };
-  }>;
-}
-interface Props {
+interface IDetailprops {
   data: {
     pokemon: IDetailPokemon;
   };
 }
 
-const Detail = ({ data }: Props) => {
+const Detail = ({ data }: IDetailprops) => {
   return (
     <div
       style={{

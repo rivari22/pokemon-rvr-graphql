@@ -1,4 +1,3 @@
-import styles from "../styles/Home.module.css";
 import React, { useContext, useEffect } from "react";
 import BottomTab from "../components/Tab/BottomTab";
 import CardList from "../components/Card/CardList";
@@ -18,7 +17,7 @@ const MyPokemon = () => {
   }, [dispatchPokemon]);
 
   return (
-    <div className={styles.container}>
+    <div className="containerList">
       <div
         style={{
           display: "flex",

@@ -5,7 +5,7 @@ export interface PokemonInterface {
   id: number | null;
   name: string;
   dreamworld: string;
-  username?: string;
+  nickname?: string;
 }
 
 export type InitialPokemonStateType = Array<PokemonInterface>;

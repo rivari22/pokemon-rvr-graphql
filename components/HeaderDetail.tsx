@@ -2,7 +2,8 @@
 import styled from "@emotion/styled";
 import router from "next/router";
 import React from "react";
-import { IDetailPokemon } from "../pages/detail/[name]";
+import { MdKeyboardBackspace } from "react-icons/md";
+import { IDetailPokemon } from "../interface/DetailInterface";
 
 const CardMini = styled.div`
   padding: 4px 20px;
@@ -22,9 +23,12 @@ const HeaderDetail = (props: IDetailPokemon) => {
         padding: 16,
       }}
     >
-      <div onClick={() => router.back()} className="hoverPointer">
-        arrow back
-      </div>
+      <MdKeyboardBackspace
+        size={"2em"}
+        onClick={() => router.back()}
+        className="hoverPointer"
+        color="white"
+      />
       <div
         style={{
           display: "flex",
